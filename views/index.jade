@@ -1,0 +1,32 @@
+doctype 5
+html(lang='es')
+    head
+        title Mi primera aplicacion en node
+        meta(charset='utf-8')
+        link(rel="stylesheet", type="text/css", href="css/reset.css")
+        link(rel="stylesheet", type="text/css", href="css/style.css")
+    body
+        h1 Mensajes
+        #container
+            #contentMessages
+            .row
+                textarea(name="mensaje", type="text", rows="5")
+
+        script(type="text/javascript", src="/socket.io/socket.io.js")
+        script(type="text/javascript", src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
+        script(type='text/javascript')
+            var websocket = io.connect();
+
+            $(document).on('ready', function () {
+                $('textarea').keypress(function(event) {
+                    if(event.which == 13) {
+                        var data = {}
+                        data.message = $(this).val();
+                        websocket.emit('sendMessage', data);
+                        $(this).val('');
+                    }
+                });
+                websocket.on('newMessage', function (mensaje) {
+                    $('#contentMessages').append('<div class="message">' + mensaje + '</div>');
+                });
+            });
