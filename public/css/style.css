@@ -1,22 +1,55 @@
-h1 {
-	background: #5FB471;
-	color: #FFF;
-	font-weight: bold;
-	font-size: 2em;
-	text-align: center;
-	padding: 10px 0px;
+html,
+body {
+	height: 100%;
 }
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 14px;
+}
+
+h1 {
+	background-color: #5fb471;
+	border-bottom: 2px solid rgba(61, 139, 78, 0.35);
+	color: #FFF;
+	font-size: 18px;
+	font-size: 1.8rem;
+	font-weight: bold;
+	line-height: 40px;
+	/*padding: 10px 0px;*/
+	text-align: center;
+	text-shadow: 0 2px 1px rgba(61, 139, 78, 0.75);
+}
+
+#contentMessages {
+	bottom: 50px;
+	left: 0;
+	padding: 10px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	position: fixed;
+	right: 0;
+	top: 42px;
+}
+
 textarea {
-	position: absolute;
 	border: 1px solid #ccc;
 	bottom: 0px;
-	width: 100%;
-	resize: none;
+	height: 50px;
 	outline: none;
+	padding: 5px;
+	position: fixed;
+	resize: none;
+	width: 100%;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+
 textarea:focus {
 	border-color: rgba(82, 168, 236, 0.8);
 	outline: 0;

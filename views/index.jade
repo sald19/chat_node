@@ -3,29 +3,33 @@ html(lang='es')
     head
         title Mi primera aplicacion en node
         meta(charset='utf-8')
-        link(rel="stylesheet", type="text/css", href="css/reset.css")
-        link(rel="stylesheet", type="text/css", href="css/style.css")
+        link(rel="stylesheet", href="css/reset.css")
+        link(rel="stylesheet", href="css/helpers.css")
+        link(rel="stylesheet", href="css/style.css")
     body
         h1 Mensajes
         #container
-            #contentMessages
+            #contentMessages.scroll
             .row
-                textarea(name="mensaje", type="text", rows="5")
+                textarea(name="mensaje", autofocus)
 
-        script(type="text/javascript", src="/socket.io/socket.io.js")
-        script(type="text/javascript", src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
-        script(type='text/javascript')
+        script(src="/socket.io/socket.io.js")
+        script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
+        script
             var websocket = io.connect();
 
             $(document).on('ready', function () {
-                $('textarea').keypress(function(event) {
-                    if(event.which == 13) {
-                        var data = {}
+                $('textarea').on('keypress', function(e) {
+                    var code = e.keyCode || e.which;
+
+                    if(code === 13) {
+                        var data = {};
                         data.message = $(this).val();
                         websocket.emit('sendMessage', data);
                         $(this).val('');
                     }
                 });
+
                 websocket.on('newMessage', function (mensaje) {
                     $('#contentMessages').append('<div class="message">' + mensaje + '</div>');
                 });
