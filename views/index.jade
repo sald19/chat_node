@@ -15,7 +15,10 @@ html(lang='es')
 
         script(src="/socket.io/socket.io.js")
         script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
-        script
+        script(src="js/handlebars.js")
+        script(src="js/message.js")
+        script.
+            console.log(Template);
             var websocket = io.connect();
 
             $(document).on('ready', function () {
@@ -31,6 +34,10 @@ html(lang='es')
                 });
 
                 websocket.on('newMessage', function (mensaje) {
-                    $('#contentMessages').append('<div class="message">' + mensaje + '</div>');
+                    console.log(mensaje);
+                    var resultTemplate = Handlebars.compile(Template.message);
+                    var html = resultTemplate(mensaje);
+                    $('#contentMessages').append(html);
+                    //- $('#contentMessages').append('<div class="message">' + mensaje + '</div>');
                 });
             });

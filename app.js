@@ -25,7 +25,16 @@ io.sockets.on('connection', function (socket) {
     console.log("un nuevo socket conectado");
 
     socket.on('sendMessage', function (data) {
-        var mensaje = data.message;
-        io.sockets.emit('newMessage', mensaje);
+        data.color = get_random_color();
+        io.sockets.emit('newMessage', data);
     });
 });
+
+function get_random_color() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;
+}
