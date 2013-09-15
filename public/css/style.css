@@ -63,25 +63,21 @@ textarea:focus {
 	height: 40px;
 	position: relative;
 }
-.avatar:before {
+.avatar:before,
+.avatar:after {
+	border-color: transparent transparent transparent transparent;
+	border-style: solid;
 	content: "";
-	position: absolute;
-	top: -25px;
 	left: 0;
-	width: 0;
-	height: 0;
-	border-left: 40px solid transparent;
-	border-right: 40px solid transparent;
-	border-bottom: 25px solid black;
+	position: absolute;
+}
+.avatar:before {
+	border-width: 0 40px 25px 40px;
+	border-bottom-color: inherit;
+	top: -24px;
 }
 .avatar:after {
-	content: "";
-	position: absolute;
-	bottom: -25px;
-	left: 0;
-	width: 0;
-	height: 0;
-	border-left: 40px solid transparent;
-	border-right: 40px solid transparent;
-	border-top: 25px solid black;
+	border-width: 25px 40px 0 40px;
+	border-top-color: inherit;
+	bottom: -24px;
 }
