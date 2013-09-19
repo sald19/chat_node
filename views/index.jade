@@ -1,8 +1,9 @@
 doctype 5
 html(lang='es')
     head
-        title Mi primera aplicacion en node
         meta(charset='utf-8')
+        title Mi primera aplicacion en node
+        meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
         link(rel="stylesheet", href="css/reset.css")
         link(rel="stylesheet", href="css/helpers.css")
         link(rel="stylesheet", href="css/style.css")
@@ -18,26 +19,34 @@ html(lang='es')
         script(src="js/handlebars.js")
         script(src="js/message.js")
         script.
-            console.log(Template);
             var websocket = io.connect();
 
+            websocket.on('connect', function() {
+                var user = prompt('Cual es tu nombre:');
+                websocket.emit('newUser', user);
+            });
+
             $(document).on('ready', function () {
-                $('textarea').on('keypress', function(e) {
+                $('textarea').on('keyup', function(e) {
+                    var textareaMessage = $(this).val();
                     var code = e.keyCode || e.which;
 
                     if(code === 13) {
-                        var data = {};
-                        data.message = $(this).val();
-                        websocket.emit('sendMessage', data);
                         $(this).val('');
+                        
+                        if(!textareaMessage.match(/^\s*$/)) {
+                            var data = {};
+                            data.message = textareaMessage
+                            websocket.emit('sendMessage', data);
+                        }
                     }
                 });
 
                 websocket.on('newMessage', function (mensaje) {
-                    console.log(mensaje);
                     var resultTemplate = Handlebars.compile(Template.message);
                     var html = resultTemplate(mensaje);
-                    $('#contentMessages').append(html);
-                    //- $('#contentMessages').append('<div class="message">' + mensaje + '</div>');
+                    var scroll = $('#contentMessages')[0].scrollHeight;
+                    $('#contentMessages').append(html).scrollTop(scroll);
+
                 });
             });

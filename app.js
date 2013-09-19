@@ -1,7 +1,11 @@
 var express = require('express')
     , app = express()
     , http = require('http')
-    , server = http.createServer(app);
+    , server = http.createServer(app),
+    model = require('./models'),
+    mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/chat');
 
 app.set('views', __dirname + '/views');
 
@@ -21,13 +25,36 @@ server.listen(8888);
 
 // websockets
 var io = require('socket.io').listen(server);
+
 io.sockets.on('connection', function (socket) {
     console.log("un nuevo socket conectado");
 
     socket.on('sendMessage', function (data) {
-        data.color = get_random_color();
-        io.sockets.emit('newMessage', data);
+        socket.get('user', function (error, user) {
+            if (!user) return false;
+            model.user.findOne({ name: user }, function (error, doc) {
+                if (doc) {
+                    data.color = doc.color;
+                    data.name = doc.name;
+                    io.sockets.emit('newMessage', data);
+                } else {
+                    var doc = new model.user({
+                        name: user,
+                        color: get_random_color()
+                    }).save(function (err, doc) {
+                        if (!err) {
+                            data.color = doc.color;
+                            data.name = doc.name;
+                            io.sockets.emit('newMessage', data);
+                        }
+                    });
+                }
+            });
+        });
     });
+    socket.on('newUser', function (user) {
+        socket.set('user', user);
+    })
 });
 
 function get_random_color() {

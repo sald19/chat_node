@@ -8,6 +8,7 @@
     	"express": "*",
     	"nodemon": "*",
 	    "jade": "*",
-	    "socket.io": "*"
+	    "socket.io": "*",
+	    "mongoose": "~3.6.19"
  	}
 }
