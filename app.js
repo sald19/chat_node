@@ -1,9 +1,9 @@
 var express = require('express')
     , app = express()
     , http = require('http')
-    , server = http.createServer(app),
-    model = require('./models'),
-    mongoose = require('mongoose');
+    , server = http.createServer(app)
+    , models = require('./db/models')
+    , mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/chat');
 
@@ -32,13 +32,13 @@ io.sockets.on('connection', function (socket) {
     socket.on('sendMessage', function (data) {
         socket.get('user', function (error, user) {
             if (!user) return false;
-            model.user.findOne({ name: user }, function (error, doc) {
+            models.User.findOne({ name: user }, function (error, doc) {
                 if (doc) {
                     data.color = doc.color;
                     data.name = doc.name;
                     io.sockets.emit('newMessage', data);
                 } else {
-                    var doc = new model.user({
+                    var doc = new models.User({
                         name: user,
                         color: get_random_color()
                     }).save(function (err, doc) {
